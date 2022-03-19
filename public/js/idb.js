@@ -26,7 +26,7 @@ request.onsuccess = function(event) {
     if (navigator.onLine) {
       // we haven't created this yet, but we will soon, 
       //so let's comment it out for now
-      //uploadBdtransaction();
+      uploadBdtransaction();
     }
   };
   
@@ -60,7 +60,7 @@ function uploadBdtransaction() {
     getAll.onsuccess = function() {
     // if there was data in indexedDb's store, let's send it to the api server
     if (getAll.result.length > 0) {
-        fetch('/api/pizzas', {
+        fetch('/api/transaction', {
             method: 'POST',
             body: JSON.stringify(getAll.result),
             headers: {
@@ -74,13 +74,13 @@ function uploadBdtransaction() {
                 throw new Error(serverResponse);
             }
             // open one more transaction
-            const transaction = db.transaction(['new_pizza'], 'readwrite');
+            const transaction = db.transaction(['new_bdtransaction'], 'readwrite');
             // access the new_pizza object store
-            const pizzaObjectStore = transaction.objectStore('new_pizza');
+            const bdObjectStore = transaction.objectStore('new_bdtransaction');
             // clear all items in your store
-            pizzaObjectStore.clear();
+            bdObjectStore.clear();
 
-            alert('All saved pizza has been submitted!');
+            alert('budget transaction has been submitted!');
             })
             .catch(err => {
             console.log(err);
@@ -90,4 +90,4 @@ function uploadBdtransaction() {
 }
 
 // listen for app coming back online
-window.addEventListener('online', uploadPizza);
+window.addEventListener('online', uploadBdtransaction);
